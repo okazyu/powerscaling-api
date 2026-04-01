@@ -29,7 +29,7 @@ We calculate the average of these stats and apply a multiplier based on the sele
 The "Menace Level" is an enum, and it works like this:
 
 - Coward (0.5x): a character that is known by fleeing battles. I.e: Spandam (One Piece)
-- Pacifist (0.25x): a character that usually refuses to fight; it can fight, it can be strong, but USUALLY their personal choice is not to fight. I.e: Aang (Avatar)
+- Pacifist (0.75x): a character that usually refuses to fight; it can fight, it can be strong, but USUALLY their personal choice is not to fight. I.e: Aang (Avatar)
 - Normal (1x): self-explanatory tbh
 - Aggressive (1.25x): a character that is known to being aggressive first - it is not a crazy dog, always searching for chaos and destruction, as it can be a reserved character. BUUT, whenever they're fighting, they go all-in. I.e: Kratos (God of War)
 - Homicidal (1.5x): a character that isn't rational, or at least a completely crazy person. it works as a chaos agent, bring death and destruction wherever they pass. I.e: Carnage
