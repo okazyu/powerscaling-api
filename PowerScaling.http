@@ -1,0 +1,6 @@
+@PowerScaling_HostAddress = http://localhost:5234
+
+GET {{PowerScaling_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
