@@ -1,4 +1,6 @@
-﻿namespace PowerScaling.DTO
+﻿using PowerScaling.Enums;
+
+namespace PowerScaling.DTO
 {
     public class AtualizarPersonagemRequest
     {
@@ -8,6 +10,7 @@
         public int? Força { get; set; }
         public int? Inteligencia { get; set; }
         public int? PoderDeFogo { get; set; }
+        public LevelMenace? Menace { get; set; }
         public string? ImageUrl { get; set; }
     }
 }

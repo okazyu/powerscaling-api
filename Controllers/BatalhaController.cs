@@ -20,24 +20,21 @@ namespace PowerScaling.Controllers
         }
 
         [HttpPost("compare")]
-        public async Task<IActionResult> Compare([FromBody] ComparacaoRequest request)
+        public async Task<IActionResult> Compare()
         {
-            var personagemA = await _context.Personagens
-                .FirstOrDefaultAsync(c => c.Id == request.CharacterAId);
+            var resultado = await _batalhaService.Compare();
+            return Ok(resultado);
+        }
 
-            var personagemB = await _context.Personagens
-                .FirstOrDefaultAsync(c => c.Id == request.CharacterBId);
+        [HttpGet("random-compare")]
+        public async Task<IActionResult> ComparaAleatorio() 
+        {
+            var sorteados = await _batalhaService.SortearPar();
 
-            if (personagemA is null || personagemB is null) return NotFound("Um ou ambos personagens não foram encontrados");
+            if (sorteados.Count < 2)
+                return BadRequest("Não tem personagens o suficiente");
 
-            var result = _batalhaService.Compare(
-                personagemA,
-                request.MenaceA,
-                personagemB,
-                request.MenaceB
-            );
-
-            return Ok(result);
+            return Ok(sorteados);
         }
     }
 }

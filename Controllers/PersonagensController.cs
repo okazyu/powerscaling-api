@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PowerScaling.Data;
 using PowerScaling.DTO;
 using PowerScaling.Entities;
-using System.Data.Entity;
-using System.Reflection.PortableExecutable;
 
 namespace PowerScaling.Controllers
 {
@@ -36,7 +35,8 @@ namespace PowerScaling.Controllers
                 Força = request.Força,
                 Intelecto = request.Inteligencia,
                 PoderDeFogo = request.PoderDeFogo,
-                ImageUrl = request.ImageUrl,
+                Menace = request.Menace,
+                ImageUrl = request.ImageUrl
             };
 
             _context.Personagens.Add(personagem);

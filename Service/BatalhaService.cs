@@ -1,12 +1,21 @@
-﻿using PowerScaling.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PowerScaling.Data;
+using PowerScaling.DTO;
 using PowerScaling.Entities;
 using PowerScaling.Enums;
-using System.Reflection.PortableExecutable;
 
 namespace PowerScaling.Service
 {
     public class BatalhaService
     {
+        private readonly AppDbContext _context;
+
+        public BatalhaService(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public decimal CalcularMedia(Personagens personagens) 
         {
             return (personagens.Resistencia +
@@ -30,44 +39,60 @@ namespace PowerScaling.Service
             };
         }
 
-        private decimal CalcularPontuacaoFinal(Personagens personagens, LevelMenace menace)
+        private decimal CalcularPontuacaoFinal(Personagens personagens)
         {
-            return CalcularMedia(personagens) * MultiplicadorMenace(menace);
+            return CalcularMedia(personagens) * MultiplicadorMenace(personagens.Menace);
         }
 
-        public ComparacaoResponse Compare(Personagens personagemA, LevelMenace menaceA, Personagens personagemB, LevelMenace menaceB)
+        public async Task<ComparacaoResponse> Compare()
         {
+            var sorteados = await SortearPar();
+
+            if (sorteados.Count < 2)
+                throw new InvalidOperationException("Não tem boneco o suficiente");
+
+            var personagemA = sorteados[0];
+            var personagemB = sorteados[1];
+
+            var pontuacaoA = CalcularPontuacaoFinal(personagemA);
+            var pontuacaoB = CalcularPontuacaoFinal(personagemB);
+
+            var menaceA = MultiplicadorMenace(personagemA.Menace);
+            var menaceB = MultiplicadorMenace(personagemB.Menace);
+
             var mediaA = CalcularMedia(personagemA);
             var mediaB = CalcularMedia(personagemB);
 
-            var multiplicadorA = MultiplicadorMenace(menaceA);
-            var multiplicadorB = MultiplicadorMenace(menaceB);
-
-            var pontuacaoA = CalcularPontuacaoFinal(personagemA, menaceA);
-            var pontuacaoB = CalcularPontuacaoFinal(personagemB, menaceB);
-
-            string resultado;
-            string? vencedor = null;
-
-            if (pontuacaoA > pontuacaoB) { resultado = "A venceu"; vencedor = personagemA.Nome; }
-            else if (pontuacaoB > pontuacaoA) { resultado = "B venceu"; vencedor = personagemB.Nome; }
-            else { resultado = "Empate"; }
+            var vencedor = pontuacaoA > pontuacaoB ? personagemA.Nome : pontuacaoB > pontuacaoA ? personagemB.Nome : "Draw";
 
             return new ComparacaoResponse
             {
                 NomePersonagemA = personagemA.Nome,
-                MediaPersonagemA = mediaA,
-                MultiplicadorPersonagemA = multiplicadorA,
-                PontuacaoFinalPersonagemA = pontuacaoA,
-
                 NomePersonagemB = personagemB.Nome,
+                MediaPersonagemA = mediaA,
                 MediaPersonagemB = mediaB,
-                MultiplicadorPersonagemB = multiplicadorB,
+                MultiplicadorPersonagemA = menaceA,
+                MultiplicadorPersonagemB = menaceB,
+                PontuacaoFinalPersonagemA = pontuacaoA,
                 PontuacaoFinalPersonagemB = pontuacaoB,
-
-                Resultado = resultado,
-                Vencedor = vencedor
+                Vencedor = vencedor,
             };
+            
+        }
+
+        public async Task<List<Personagens>> SortearPar()
+        {
+            var personagens = await _context.Personagens.ToListAsync();
+
+            if (personagens.Count < 2)
+                return new List<Personagens>();
+
+            var random = new Random();
+
+            return personagens
+                .OrderBy(x => random.Next())
+                .Take(2)
+                .ToList();
         }
     }
 }
