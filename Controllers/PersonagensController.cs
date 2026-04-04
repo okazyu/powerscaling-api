@@ -26,6 +26,8 @@ namespace PowerScaling.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CriarPersonagemRequest request)
         {
+            Console.WriteLine($"Create - Context hash: {_context.GetHashCode()}");
+
             var personagem = new Personagens
             {
                 Id = Guid.NewGuid(),
@@ -39,15 +41,25 @@ namespace PowerScaling.Controllers
                 ImageUrl = request.ImageUrl
             };
 
-            _context.Personagens.Add(personagem);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Personagens.Add(personagem);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
 
-            return CreatedAtAction(nameof(GetById), new { id = personagem.Id }, personagem);
+            return Ok(personagem);
         }
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
+            Console.WriteLine($"GetById - Context hash: {_context.GetHashCode()}");
+
             var personagem = await _context.Personagens.FindAsync(id);
 
             if (personagem is null) return NotFound();

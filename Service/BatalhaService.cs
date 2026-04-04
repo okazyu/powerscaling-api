@@ -44,16 +44,8 @@ namespace PowerScaling.Service
             return CalcularMedia(personagens) * MultiplicadorMenace(personagens.Menace);
         }
 
-        public async Task<ComparacaoResponse> Compare()
+        public async Task<ComparacaoResponse> Compare(Personagens personagemA, Personagens personagemB)
         {
-            var sorteados = await SortearPar();
-
-            if (sorteados.Count < 2)
-                throw new InvalidOperationException("Não tem boneco o suficiente");
-
-            var personagemA = sorteados[0];
-            var personagemB = sorteados[1];
-
             var pontuacaoA = CalcularPontuacaoFinal(personagemA);
             var pontuacaoB = CalcularPontuacaoFinal(personagemB);
 
@@ -75,6 +67,8 @@ namespace PowerScaling.Service
                 MultiplicadorPersonagemB = menaceB,
                 PontuacaoFinalPersonagemA = pontuacaoA,
                 PontuacaoFinalPersonagemB = pontuacaoB,
+                ImageUrlPersonagemA = personagemA.ImageUrl,
+                ImageUrlPersonagemB = personagemB.ImageUrl,
                 Vencedor = vencedor,
             };
             

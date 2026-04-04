@@ -20,9 +20,14 @@ namespace PowerScaling.Controllers
         }
 
         [HttpPost("compare")]
-        public async Task<IActionResult> Compare()
+        public async Task<IActionResult> Compare([FromBody] ComparacaoRequest request)
         {
-            var resultado = await _batalhaService.Compare();
+            var personagemA = await _context.Personagens.FindAsync(request.PersonagemAId);
+            var personagemB = await _context.Personagens.FindAsync(request.PersonagemBId);
+
+            if (personagemA is null || personagemB is null) return NotFound("Os personagens não foram encontrados.");
+            
+            var resultado = await _batalhaService.Compare(personagemA, personagemB);
             return Ok(resultado);
         }
 

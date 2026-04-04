@@ -12,6 +12,9 @@
         public decimal MultiplicadorPersonagemB { get; set; }
         public decimal PontuacaoFinalPersonagemB { get; set; }
 
+        public string? ImageUrlPersonagemA { get; set; }
+        public string? ImageUrlPersonagemB { get; set; }
+
         public string Resultado { get; set; } = string.Empty;
         public string? Vencedor { get; set; }
     }
