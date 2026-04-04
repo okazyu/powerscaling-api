@@ -96,6 +96,7 @@ namespace PowerScaling.Controllers
             ApplyIfNotNull(atualizarPersonagem.Inteligencia, v => personagem.Intelecto= v);
             ApplyIfNotNull(atualizarPersonagem.Velocidade, v => personagem.Velocidade = v);
             ApplyIfNotNull(atualizarPersonagem.PoderDeFogo, v => personagem.PoderDeFogo = v);
+            ApplyIfNotNull(atualizarPersonagem.Menace, v => personagem.Menace = v);
 
             ApplyIfValid(atualizarPersonagem.Durabilidade, v => v >= 0 && v <= 100, v => personagem.Resistencia = v);
             ApplyIfValid(atualizarPersonagem.Força, v => v >= 0 && v <= 100, v => personagem.Força = v);
