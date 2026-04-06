@@ -19,9 +19,7 @@ builder.Services.AddCors(options =>
                 "https://localhost:5173",
                 "https://localhost:8080",
                 "http://localhost:8080",
-                "http://localhost:8081",
-                "https://localhost:8081",
-                "https://char-showdown.vercel.app/"
+                "https://char-showdown.vercel.app"
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
